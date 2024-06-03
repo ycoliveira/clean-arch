@@ -35,6 +35,16 @@ func main() {
 	}
 	defer db.Close()
 
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS orders (
+        id VARCHAR(255) NOT NULL PRIMARY KEY,
+        price DECIMAL(10, 2) NOT NULL,
+        tax DECIMAL(10, 2) NOT NULL,
+        final_price DECIMAL(10, 2) NOT NULL
+    )`)
+	if err != nil {
+		panic(err)
+	}
+
 	rabbitMQChannel := getRabbitMQChannel()
 
 	eventDispatcher := events.NewEventDispatcher()
